@@ -61,7 +61,7 @@ export default Ember.TextField.extend({
     } else {
       return this._defaultFilterContent;
     }
-  }.property('filterContentFn'),
+  },
 
   _initializeTypeahead() {
 
@@ -76,7 +76,7 @@ export default Ember.TextField.extend({
         if (!query || query === '*') {
           return cb(content);
         }
-        cb(this.get('filterFn').apply(this.get('content'), query));
+        cb(this.filterFn().apply(this, [this.get('content'), query]));
       }),
       /* jshint unused:false */
     }).on('typeahead:selected typeahead:autocompleted', run.bind(this, (e, obj, dataSet) => {
@@ -95,7 +95,7 @@ export default Ember.TextField.extend({
 
   focusOut() {
     const query = this.$().typeahead('val');
-    const results = this.get('filterFn').apply(this.get('content'), query);
+    const results = this.filterFn().apply(this, [this.get('content'), query]);
     if ($.trim(query).length) {
       if (results.length) {
         this.set('selection', results[0]);
