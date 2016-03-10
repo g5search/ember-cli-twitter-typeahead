@@ -42,19 +42,33 @@ export default Ember.TextField.extend({
     }
   },
 
-  _filterContent(query) {
-    const regex = new RegExp(query, 'i');
+  _defaultFilterContent(sourceArray, query) {
+    const regex = new RegExp(query, 'i'); //ignore case
     const valueKey = this.get('valueToken');
-    return this.get('content').filter((thing) => {
+    //take supplied content Ember.A and run it through a filter function
+    //http://emberjs.com/api/classes/Ember.Array.html#method_filter
+    return sourceArray.filter((thing) => {
+      //run query as regex against the valueToken
+      //property of the element in the Ember.A
       return regex.test(get(thing, valueKey));
     });
+    //this will return a filtered Ember.A for all that test as true
   },
 
+  filterFn: function() {
+    if (!Ember.isBlank(this.get('filterContentFn'))) {
+      return this.get('filterContentFn');
+    } else {
+      return this._defaultFilterContent;
+    }
+  }.property('filterContentFn'),
+
   _initializeTypeahead() {
+
     this.$().typeahead({
-    }, {
       minLength: 0,
-      displayKey: run.bind(this, (object) => {
+    }, {
+      display: run.bind(this, (object) => {
         return get(object, this.get('displayKey'));
       }),
       source: run.bind(this, (query, cb) => {
@@ -62,34 +76,26 @@ export default Ember.TextField.extend({
         if (!query || query === '*') {
           return cb(content);
         }
-        cb(this._filterContent(query));
+        cb(this.get('filterFn').apply(this.get('content'), query));
       }),
-      templates: {
-        footer(object) {
-          if (object.isEmpty) {
-            return '';
-          } else {
-            return '<span class="tt-suggestion enter-suggest">Footer</span>';
-          }
-        },
-        empty() {
-          return "<span class='tt-suggestion enter-suggest'>Empty</span>";
-        }
-      }
       /* jshint unused:false */
     }).on('typeahead:selected typeahead:autocompleted', run.bind(this, (e, obj, dataSet) => {
       this.set('selection', obj);
 
-      let name = this.get('selection.name');
-      if (name) {
-        this.sendAction('onSelectAction', name);
+      let fieldValue = this.get('selection.'+this.get('displayKey'));
+      if (fieldValue) {
+        this.sendAction('onSelectAction', fieldValue);
       }
     }));
   },
 
+  focusIn() {
+    this.$().typeahead('open');
+  },
+
   focusOut() {
     const query = this.$().typeahead('val');
-    const results = this._filterContent(query);
+    const results = this.get('filterFn').apply(this.get('content'), query);
     if ($.trim(query).length) {
       if (results.length) {
         this.set('selection', results[0]);
@@ -112,14 +118,6 @@ export default Ember.TextField.extend({
 
   close() {
     this.$().typeahead('close');
-  },
-
-  focusIn() {
-    let typeahead;
-    if (!this.$().val()) {
-      typeahead = this.$().data('ttTypeahead');
-      typeahead.dropdown.update(this.$().val());
-    }
   },
 
   willDestroyElement() {
