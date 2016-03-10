@@ -1,4 +1,4 @@
-# ember-cli-twitter-typeahead
+# ember-bootstrap-typeahead
 
 [![Build Status](https://travis-ci.org/Dhaulagiri/ember-cli-twitter-typeahead.png?branch=master)](https://travis-ci.org/Dhaulagiri/ember-cli-twitter-typeahead)
 [![Ember Observer Score](http://emberobserver.com/badges/ember-cli-twitter-typeahead.svg)](http://emberobserver.com/addons/ember-cli-twitter-typeahead)
