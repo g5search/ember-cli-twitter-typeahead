@@ -1,11 +1,7 @@
 # ember-bootstrap-typeahead
 
-[![Build Status](https://travis-ci.org/Dhaulagiri/ember-cli-twitter-typeahead.png?branch=master)](https://travis-ci.org/Dhaulagiri/ember-cli-twitter-typeahead)
-[![Ember Observer Score](http://emberobserver.com/badges/ember-cli-twitter-typeahead.svg)](http://emberobserver.com/addons/ember-cli-twitter-typeahead)
-
 This is an ember wrapper for Twitter's JQuery Typeahead. It's packaged as a
-simple ember cli add on. All you have to do is use `ember install ember-cli-twitter-typeahead` and you'll be able to use the typeahead helper in
-your ember-cli app.
+simple ember cli add on. All you have to do is use `ember install ember-bootstrap-typeahead` and you'll be able to use the typeahead helper in your ember-cli app. This is forked from  https://github.com/Dhaulagiri/ember-cli-twitter-typeahead but as I found a lot of issues with that addon that didn't work for me, I just decided to make my own. Use it or fork it as desired.
 
 My fork fixes several issues from the original:
  * the minLength property of the typeahead was in the wrong place and was thus ignored. This is essential if you want it to work like a combo box where clicking on the field causes the drop down to show up
@@ -42,7 +38,7 @@ To use this in your app, simply use:
 
 ## Installation
 
-* `ember install ember-cli-twitter-typeahead`
+* `ember install ember-bootstrap-typeahead`
 
 ### Running Tests
 
