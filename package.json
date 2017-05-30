@@ -13,7 +13,7 @@
   },
   "repository": "https://github.com/robneville73/ember-cli-twitter-typeahead.git",
   "engines": {
-    "node": "4.2.x"
+    "node": ">= 4.2"
   },
   "author": "",
   "license": "MIT",
